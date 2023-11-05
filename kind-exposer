@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+# Check if the argument is provided
+if [ $# -eq 0 ]; then
+  echo "Usage: $0 <destination:port:listen_port:protocol>"
+  exit 1
+fi
+
+# Parse the argument into destination, port, listen_port, and protocol
+ARGUMENT=$1
+IFS=':' read -ra PARTS <<< "$ARGUMENT"
+DESTINATION="${PARTS[0]}"
+PORT="${PARTS[1]}"
+LISTEN_PORT="${PARTS[2]}"
+PROTOCOL="${PARTS[3]}"
+
+# Check if the argument has the correct format
+if [ -z "$DESTINATION" ] || [ -z "$PORT" ] || [ -z "$LISTEN_PORT" ] || [ -z "$PROTOCOL" ]; then
+  echo "Invalid argument format. Use <destination:port:listen_port:protocol>."
+  exit 1
+fi
+
+# Check if the protocol is "tcp" or "udp" and execute the socat command accordingly
+if [ "$PROTOCOL" == "tcp" ]; then
+  socat tcp-listen:"$LISTEN_PORT",reuseaddr,fork "tcp:$DESTINATION:$PORT"
+elif [ "$PROTOCOL" == "udp" ]; then
+  socat udp-listen:"$LISTEN_PORT",reuseaddr,fork "udp:$DESTINATION:$PORT"
+else
+  echo "Unsupported protocol. Use 'tcp' or 'udp'."
+  exit 1
+fi
