@@ -22,9 +22,9 @@ fi
 
 # Check if the protocol is "tcp" or "udp" and execute the socat command accordingly
 if [ "$PROTOCOL" == "tcp" ]; then
-  socat tcp-listen:"$LISTEN_PORT",reuseaddr,fork "tcp:$DESTINATION:$PORT"
+  socat -dd tcp-listen:"$LISTEN_PORT",reuseaddr,fork "tcp:$DESTINATION:$PORT"
 elif [ "$PROTOCOL" == "udp" ]; then
-  socat udp-listen:"$LISTEN_PORT",reuseaddr,fork "udp:$DESTINATION:$PORT"
+  socat -dd udp-listen:"$LISTEN_PORT",reuseaddr,fork "udp:$DESTINATION:$PORT"
 else
   echo "Unsupported protocol. Use 'tcp' or 'udp'."
   exit 1

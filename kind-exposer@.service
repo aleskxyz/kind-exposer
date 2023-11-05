@@ -1,5 +1,5 @@
 [Unit]
-Description=Expose Kind LoadBalancer to Public
+Description=Expose Kind LoadBalancer to the Public
 
 [Service]
 ExecStart=/usr/local/bin/kind-exposer %i
